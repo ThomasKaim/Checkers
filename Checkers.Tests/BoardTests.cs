@@ -76,6 +76,13 @@ namespace Checkers.Tests
             board.Move(1, 1, 2, 2);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestMoveOffBoard()
+        {
+            Board board = new Board();
+            board.Move(2, 7, 3, 8);
+        }
 
     }
 }
