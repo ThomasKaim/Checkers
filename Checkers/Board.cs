@@ -5,7 +5,7 @@ namespace Checkers
 {
     public class Board
     {
-        char[][] _squares;
+        readonly char[][] _squares;
         public Board()
         {
 
@@ -86,6 +86,9 @@ namespace Checkers
 
         public bool CanJump(int row1, int column1, int row2, int column2, char team)
         {
+            if (!this.IsOnBoard(row1, column1)) { return false; }
+            if (!this.IsOnBoard(row2, column2)) { return false; }
+
             if (team == 'O' )
             {
                 if (row1 == row2 + 2)
@@ -232,13 +235,57 @@ namespace Checkers
             }
             return false;
         }
-
-        public bool IsValid(int row1, int column1, int row2, int column2, char team)
+        public bool MustJump(char team)
         {
-            if ((row1 < 0) || (row1 >= 8)) { throw new Exception("row1 is off the board"); }
-            if ((row2 < 0) || (row2 >= 8)) { throw new Exception("row2 is off the board"); }
-            if ((column1 < 0) || (column1 >= 8)) { throw new Exception("column1 is off the board"); }
-            if ((column2 < 0) || (column2 >= 8)) { throw new Exception("column2 is off the board"); }
+            
+            
+                for (int row = 0; row < 8; row++)
+                {
+                    for (int column = 0; column < 8; column++)
+                    {
+                        if (this._squares[row][column] == 'X')
+                        {
+                            if (CanJump(row, column, (row + 2), (column + 2), team)) { return true; }
+                            if (CanJump(row, column, (row + 2), (column - 2), team)) { return true; }
+                        }
+                        if (this._squares[row][column] == 'W')
+                        {
+                            if (CanJump(row, column, (row + 2), (column + 2), team)) { return true; }
+                            if (CanJump(row, column, (row + 2), (column - 2), team)) { return true; }
+                            if (CanJump(row, column, (row - 2), (column + 2), team)) { return true; }
+                            if (CanJump(row, column, (row - 2), (column - 2), team)) { return true; }
+                        }
+                        if (this._squares[row][column] == 'O')
+                        {
+                            if (CanJump(row, column, (row - 2), (column + 2), team)) { return true; }
+                            if (CanJump(row, column, (row - 2), (column - 2), team)) { return true; }
+                        }
+                        if (this._squares[row][column] == 'U')
+                        {
+                            if (CanJump(row, column, (row + 2), (column + 2), team)) { return true; }
+                            if (CanJump(row, column, (row + 2), (column - 2), team)) { return true; }
+                            if (CanJump(row, column, (row - 2), (column + 2), team)) { return true; }
+                            if (CanJump(row, column, (row - 2), (column - 2), team)) { return true; }
+                        }
+                    }
+                }
+            
+
+            return false;
+        }
+        public bool IsOnBoard(int row, int column)
+        {
+            if (row >= 8) { return false; }
+            if (row < 0) { return false; }
+            if (column >= 8) { return false; }
+            if (column < 0) { return false; }
+            return true;
+        }
+
+        public bool IsMoveValid(int row1, int column1, int row2, int column2, char team)
+        {
+            if (!this.IsOnBoard(row1, column1)) { return false; }
+            if (!this.IsOnBoard(row2, column2)) { return false; }
 
             if (this._squares[row2][column2] != ' ') { throw new Exception("There is a piece already there"); }
             char piece = this._squares[row1][column1];
@@ -246,7 +293,11 @@ namespace Checkers
 
             if (CanJump(row1, column1, row2, column2, team)) { return true; }
 
+            if (MustJump(team))
+            {
+                if (!CanJump(row1, column1, row2, column2, team)){ throw new Exception("You must capture a piece"); }
 
+            }
             if (team == 'O')
             {
                 if (row1 == row2 + 1)
@@ -318,7 +369,7 @@ namespace Checkers
 
             if (lastTeam == 'O' || lastTeam == 'U') { if (team == 'O' || team == 'U') { throw new Exception("You can not move twice in a row"); } }
             if (lastTeam == 'X' || lastTeam == 'W') { if (team == 'X' || team == 'W') { throw new Exception("You can not move twice in a row"); } }
-            if (IsValid(startRow, startColumn, row2, column2, team))
+            if (IsMoveValid(startRow, startColumn, row2, column2, team))
             {
                 this._squares[startRow][startColumn] = ' ';
                 this._squares[row2][column2] = team;
@@ -337,6 +388,7 @@ namespace Checkers
             }
         }
         
+
 
     }
 }
