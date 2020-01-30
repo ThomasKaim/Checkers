@@ -19,7 +19,7 @@ namespace Checkers
 
                 string[] parts = input.Split(' ');
                 
-                
+
 
                 try
                 {
@@ -28,20 +28,20 @@ namespace Checkers
                     int row2 = int.Parse(parts[1]);
                     int column1 = int.Parse(parts[2]);
                     int column2 = int.Parse(parts[3]);
-                    
+
                     board.Move(row1, row2, column1, column2);
                 }
-               catch (Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                     continue;
- 
+
                 }
                 board.Print();
 
             }
-            
-         
+
+
         }
     }
 }

@@ -330,15 +330,13 @@ namespace Checkers
                 this._squares[jumpedRow][jumpedColumn] = ' ';
             }
             lastTeam = team;
-        }
-        public void Kinger()
-        {
-            for (int column = 0; column <= 8; column++)
-            {
-                if (this._squares[7][column] == 'X') { this._squares[7][column] = 'W'; }
-                if (this._squares[0][column] == 'O') { this._squares[0][column] = 'U'; }
+            if (row2 == 0 || row2 == 7){
+                if (team == 'X'){ this._squares[row2][column2] = 'W'; }
+                if (team == 'O'){ this._squares[row2][column2] = 'U'; }
+            
             }
         }
+        
 
     }
 }

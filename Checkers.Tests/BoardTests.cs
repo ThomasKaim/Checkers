@@ -53,17 +53,16 @@ namespace Checkers.Tests
         public void TestMove()
         {
             Board board = new Board();
-            board.Move(5, 0, 4, 1);
-            board.Move(4, 1, 3, 2);
-            board.Move(2, 1, 4, 3);
+            board.Move(2, 1, 3, 0);
+            
             this.AssertBoards(
 @" 01234567
 0 X X X X
 1X X X X
 2   X X X
-3   
-4   X 
-5  O O O 
+3X   
+4    
+5O O O O 
 6 O O O O
 7O O O O", board);
         }
