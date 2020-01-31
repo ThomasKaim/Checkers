@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Checkers.Tests
 {
     [TestClass]
-    public class BoardTests
+    public class GameEngineTests
     {
         public void AssertBoards(string expected, Board actual)
         {
@@ -33,20 +33,48 @@ namespace Checkers.Tests
         }
 
         [TestMethod]
-        public void TestCreate()
+        public void TestMove()
         {
-            Board board = new Board();
+            GameEngine gameEngine = new GameEngine();
+            gameEngine.Move(2, 1, 3, 0);
 
             this.AssertBoards(
 @" 01234567
 0 X X X X
 1X X X X
-2 X X X X
-3
-4
+2   X X X
+3X   
+4    
 5O O O O 
 6 O O O O
-7O O O O", board);
+7O O O O", gameEngine.Board);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestBadMove()
+        {
+            GameEngine gameEngine = new GameEngine();
+            gameEngine.Move(1, 1, 2, 2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestMoveOffBoard()
+        {
+            GameEngine gameEngine = new GameEngine();
+            gameEngine.Move(2, 7, 3, 8);
+
+        }
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestMustJump()
+        {
+            GameEngine gameEngine = new GameEngine();
+            gameEngine.Move(2, 1, 3, 0);
+            gameEngine.Move(5, 2, 4, 1);
+            gameEngine.Move(2, 3, 3, 2);
+
         }
 
     }
